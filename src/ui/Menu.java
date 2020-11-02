@@ -32,7 +32,7 @@ public class Menu {
 		menu += "«•«•«•«• LASER GAME •»•»•»•»•»\n";
 		menu += "~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 		menu += "1. Play!\n";
-		menu += "2. Show score\n";
+		menu += "2. Show players scores\n";
 		menu += "3. Exit\n";
 		menu += "Please enter an option\n";
 		return menu;
@@ -52,7 +52,8 @@ public class Menu {
 			play();
 			break;
 		case 2:
-
+			System.out.println("~~~~~~~~~~ SCORES ~~~~~~~~~~");
+			showScoresInOrder();
 			break;
 		case 3:
 			exitProgram();
@@ -61,7 +62,6 @@ public class Menu {
 			System.out.println("Select a correct option");
 			break;
 		}
-
 	}
 
 	private void play() {
@@ -69,19 +69,20 @@ public class Menu {
 		String line = sc.nextLine();
 		String [] parts = line.split(" ");
 		String nickName = (parts[0]);
+		long initialScore = 50;
 		int n = Integer.parseInt(parts[1]);
 		int m = Integer.parseInt(parts[2]);
 		int k = Integer.parseInt(parts[3]);
 		gm.addMatrix(m, n);
 		if(k <= m*n) {
 			gm.generateRandomMirrors(m, n, k);
-			fireCoordinates(false, m, n, 1, nickName, k);
+			fireCoordinates(false, m, n, 1, nickName, k, initialScore);
 		} else {
 			System.out.println("Mirrors must be minors than the matrix size");
 		}
 	}
 
-	public void fireCoordinates(boolean stop,int m, int n, int count, String nickName, int k) {
+	private void fireCoordinates(boolean stop,int m, int n, int count, String nickName, int k, long score) {
 		stop = false;
 		if (count > 0) {
 			System.out.println("--------- LASER MATRIX ---------");
@@ -92,16 +93,22 @@ public class Menu {
 			System.out.println(nickName+": "+k+"mirrors remaining");
 			System.out.println("Type menu to exit, L to locate or coordinate to fire");
 		}
-//		System.out.println("Type menu to exit, L to locate or coordinate to fire");
 		String fire = sc.nextLine();
 		String [] fParts = fire.split("");
-		if(fire.equalsIgnoreCase("Menu") || stop == true) {
+		if(fire.equalsIgnoreCase("Menu") || stop == true || k == 0) {
 			//exit
+			if(k == 0) {
+				System.out.println("You won!!!");
+				gm.addPlayer(nickName, score);
+			} else {
+				gm.addPlayer(nickName, score);
+			}
 			stop = true;
 
 		} else if(fParts[0].equalsIgnoreCase("L")){
 			boolean mirrorFound = false;
 			int kRest = 0;
+			long scoreMult = 0;
 			int rowFire = Integer.parseInt(fParts[1]);
 			char colFireChar = fParts[2].charAt(0);
 			int colFire = colFireChar;
@@ -115,16 +122,21 @@ public class Menu {
 			}
 			if(mirrorFound == true) {
 				kRest = 1;
+				scoreMult = 100;
 			}
 			System.out.println(gm.getMatrix());
-			fireCoordinates(stop, m, n, count-1, nickName, k-kRest);
+			fireCoordinates(stop, m, n, count-1, nickName, k-kRest, score+scoreMult);
 
 		} else {
+			//*********** Fire ****************************
 			int rowFire = Integer.parseInt(fParts[0]);
 			char colFireChar = fParts[1].charAt(0);
 			int colFire = colFireChar;
 			int colToFire = (char)(colFire-'A');
-			String directorFire = (fParts[2]);
+			String directorFire = "";
+			if(fParts.length == 3) {
+				directorFire = (fParts[2]);
+			}
 			if(rowFire-1 < m && colToFire < n) {
 				if(gm.fire(rowFire-1, colToFire, directorFire) == false) {
 					System.out.println("Fire can not be executed");
@@ -140,11 +152,19 @@ public class Menu {
 			System.out.println("--------- LASER MATRIX ---------");
 			System.out.println(nickName+": "+k+"mirrors remaining");
 			System.out.println(gm.getMatrix());
-			fireCoordinates(stop, m, n, count-1, nickName, k);
+			fireCoordinates(stop, m, n, count-1, nickName, k, score);
 		}
 	}
 
-
+	private void showScoresInOrder() {
+		gm.setInfoScores("");
+		gm.printInOrder();
+		if(gm.getInfoScores().equalsIgnoreCase("")) {
+			System.out.println("***** There no scores yet ******");
+		} else {
+			System.out.println(gm.getInfoScores());	
+		}
+	}
 
 
 
