@@ -1,55 +1,89 @@
 package model;
 
 public class Node {
-	
-	private char mirror;
-	private Node up;
+
+	private int row;
+	private int col;
+	private String mirror;
+	private Node next;
+	private Node prev;
+	private Node up;	
 	private Node down;
-	private Node right;
-	private Node left;
-	private String location;
+	private String state;
 	
-	public Node() {
-
+	public Node(int r, int c) {
+		row = r;
+		col = c;
+		mirror = "";
+		state = "";
 	}
-
-	public char getMirror() {
+	
+	
+	public String getMirror() {
 		return mirror;
 	}
 
-	public void setMirror(char mirror) {
+	public void setMirror(String mirror) {
 		this.mirror = mirror;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public int getRow() {
+		return row;
+	}
+	
+	public int getCol() {
+		return col;
+	}
+	
+	public char getNameCol() {
+		return (char)('A'+col);
+	}
+	
+	public Node getNext() {
+		return next;
+	}
+
+	public Node getPrev() {
+		return prev;
 	}
 
 	public Node getUp() {
 		return up;
 	}
 
-	public void setUp(Node up) {
-		this.up = up;
-	}
-
 	public Node getDown() {
 		return down;
 	}
 
-	public void setDown(Node down) {
-		this.down = down;
+	public void setPrev(Node p) {
+		prev = p;
 	}
 
-	public Node getRight() {
-		return right;
+	public void setNext(Node n) {
+		next = n;
 	}
 
-	public void setRight(Node right) {
-		this.right = right;
+	public void setUp(Node u) {
+		up = u;
 	}
 
-	public Node getLeft() {
-		return left;
+	public void setDown(Node d) {
+		down = d;
 	}
-
-	public void setLeft(Node left) {
-		this.left = left;
+	
+//	public String toString() {
+//		return "[("+row+","+col+")]";
+//	}
+	public String toString() {
+		return "[ "+getState()+" ]";
+//		return "[ "+getMirror()+" ]";
 	}
 }
