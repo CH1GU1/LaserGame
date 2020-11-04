@@ -417,12 +417,40 @@ public class GameManager {
 		String course = "";
 		if(nodeToGo.getUp() == null) {
 			course = "down";
+			if(!nodeToGo.getMirror().contentEquals("")) {
+				if(nodeToGo.getMirror().contentEquals("/")) {
+					course = "left";
+				}else {
+					course = "right";
+				}
+			} 
 		}else if(nodeToGo.getDown() == null) {
 			course = "up";
+			if(!nodeToGo.getMirror().equals("")) {
+				if(nodeToGo.getMirror().contentEquals("/")) {
+					course = "right";
+				}else {
+					course = "left";
+				}
+			}
 		}else if(nodeToGo.getPrev() == null) {
 			course = "right";
+			if(!nodeToGo.getMirror().contentEquals("")) {
+				if(nodeToGo.getMirror().contentEquals("/")) {
+					course = "up";
+				}else {
+					course = "down";
+				}
+			}
 		}else if(nodeToGo.getNext() == null) {
 			course = "left";
+			if(!nodeToGo.getMirror().contentEquals("")) {
+				if(nodeToGo.getMirror().contentEquals("/")) {
+					course = "down";
+				}else {
+					course = "up";
+				}
+			}
 		}
 		return course;
 	}
@@ -440,21 +468,62 @@ public class GameManager {
 	public String startCourseSpecialCase(String course, Node nodeToGo) {
 		String go = "";
 		if(nodeToGo.getUp() == null ) {
-			if(course.equalsIgnoreCase("H") && nodeToGo.getNext() == null) {
+			if(course.equalsIgnoreCase("H") && nodeToGo.getNext() == null ) {
 				go = "left";
-			}else {
+				if(!nodeToGo.getMirror().contentEquals("")) {
+					if(nodeToGo.getMirror().contentEquals("/")) {
+						go = "down";
+					}else {
+						go = "up";
+					}
+				}
+			}else if(course.equalsIgnoreCase("H") && nodeToGo.getPrev() == null ) {
 				go = "right";
-			}if(course.equalsIgnoreCase("V")) {
-				go = "down";
+				if(!nodeToGo.getMirror().contentEquals("")){
+					if(nodeToGo.getMirror().contentEquals("/")){
+						go = "up";
+					}else {
+						go = "down";
+					}
+				}
+			}if(course.equalsIgnoreCase("V")){
+				if(nodeToGo.getMirror().contentEquals("")) {
+					go = "down";
+				}else if(nodeToGo.getMirror().contentEquals("/")) {
+					go = "left";
+				}else {
+					go = "right";
+				}
 			}
 		}
-		else if(nodeToGo.getDown() == null) {
-			if(course.equalsIgnoreCase("H") && nodeToGo.getNext() == null) {
+
+		if(nodeToGo.getDown() == null) {
+			if(course.equalsIgnoreCase("H") && nodeToGo.getNext() == null ) {
 				go = "left";
-			}else {
+				if(!nodeToGo.getMirror().contentEquals("")) {
+					if(nodeToGo.getMirror().contentEquals("/")) {
+						go = "down";
+					}else {
+						go = "up";
+					}
+				}
+			}else if(course.equalsIgnoreCase("H") && nodeToGo.getPrev() == null ) {
 				go = "right";
-			} if(course.equalsIgnoreCase("V")) {
-				go = "up";
+				if(!nodeToGo.getMirror().contentEquals("")){
+					if(nodeToGo.getMirror().contentEquals("/")){
+						go = "up";
+					}else {
+						go = "down";
+					}
+				}
+			}if(course.equalsIgnoreCase("V")){
+				if(nodeToGo.getMirror().contentEquals("")) {
+					go = "up";
+				}else if(nodeToGo.getMirror().contentEquals("/")) {
+					go = "right";
+				}else {
+					go = "left";
+				}
 			}
 		}
 		return go;
