@@ -74,7 +74,7 @@ public class GameManager implements Serializable {
 	}
 
 	/**
-	 * This add a player to the binary tree
+	 * This is the public method to add a player to the binary tree
 	 * <b><pre><br>Players must be have different scores cause is saved to a binary tree<br>
 	 * 
 	 * @param nickName String as the player nick name
@@ -90,7 +90,15 @@ public class GameManager implements Serializable {
 			addPlayer(root, toAdd);
 		}
 	}
-
+	/**
+	 * This is the private method to add a player to the binary tree recursive way
+	 * <b><pre><br>Players must be have different scores cause is saved to a binary tree<br>
+	 * 
+	 * @param current Player as the player reference in the recursive way
+	 * @param newPlayer Player as the new player to add
+	 * 
+	 * <b>post:</b>Player was saved on the binary tree<br>
+	 */
 	private void addPlayer(Player currentPlayer, Player newPlayer) {
 		if (newPlayer.getScore() < currentPlayer.getScore() && currentPlayer.getLeft() == null) {
 			currentPlayer.setLeft(newPlayer);
@@ -107,7 +115,14 @@ public class GameManager implements Serializable {
 			}
 		}
 	}
-
+	/**
+	 * This is the public method to print InOrder the binary tree
+	 * <b><pre><br>Players must be have different scores cause this way to print is exclusive to a strict binary tree<br>
+	 * 
+	 * @return info as String with the players information
+	 * 
+	 * <b>post:</b>Player on the binary tree were deploy<br>
+	 */
 	public String printInOrder() {
 		String info = "";
 		if(root == null) {
@@ -117,7 +132,18 @@ public class GameManager implements Serializable {
 		}
 		return info;
 	}
-
+	/**
+	 * This is the private method to print InOrder the binary tree in recursive way
+	 * <b><pre><br>Players must be have different scores cause this way to print is exclusive to a strict binary tree<br>
+	 * 
+	 * @param ply as the current player to make the recursive way
+	 * @param infoScores as the String with the players information
+	 * @param num as integer of the players enumeration  
+	 * 
+	 * @return info as String with the players information
+	 * 
+	 * <b>post:</b>Player on the binary tree were deploy<br>
+	 */
 	private String printInOrder(Player ply, String infoScores, int num) {
 		if (ply == null) 
 			return infoScores; 
@@ -132,29 +158,50 @@ public class GameManager implements Serializable {
 		return printInOrder(ply.getRight(), infoScores, num+1); 
 
 	} 
-
-	public void cheatMode(int m, int n) {
-
-	}
-
+	/**
+	 * This is the public recursive method to enable the cheat mode to reveal the mirrors on the game
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * 
+	 * @param n as the first matrix Node
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public void runCheat(Node n) {
 		if(n == null) {
-			//nada
+			//nothing
 		} else {
 			runLeftToRight(n);
 			runCheat(n.getDown());
 		}
 	}
-
-	public void runLeftToRight(Node n) {
+	/**
+	 * This is the private method to run the matrix left to the right and reveal mirrors on the game 
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * 
+	 * @param n as the current node revealing mirror
+	 * 
+	 * <b>post:</b><br>
+	 */
+	private void runLeftToRight(Node n) {
 		if(n == null) {
-			//nada
+			//nothing
 		} else {
 			n.setState(n.getMirror());
 			runLeftToRight(n.getNext());
 		}
 	}
-
+	/**
+	 * This is the public method to search a node on the matrix
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * <b><pre><br>Node to search must be on the matrix size<br>
+	 * 
+	 * @param toSearch as the node to search on matrix
+	 * @param n as the current Node to make the recursive way
+	 * 
+	 * @return Node as the node found is on the matrix, otherwise, returns null
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public Node goByMatrix(Node toSearch, Node n) {
 		if(n == null) {
 			//nothing
@@ -165,7 +212,18 @@ public class GameManager implements Serializable {
 		}
 		return found;
 	}
-
+	/**
+	 * This is the private method to go by the matrix left to the right and search a node
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * <b><pre><br>Node to search must be on the matrix size<br>
+	 * 
+	 * @param toSearch as the node to search on matrix
+	 * @param n as the current Node to make the recursive way
+	 * 
+	 * @return Node as the node found is on the matrix, otherwise, returns null
+	 * 
+	 * <b>post:</b><br>
+	 */
 	private Node goBymatrixLeftToRight(Node toSearch, Node n) {
 		Node found = null;
 		if(n == null) {
@@ -179,15 +237,30 @@ public class GameManager implements Serializable {
 		return found;
 
 	}
-
+	/**
+	 * This method returns the node where the laser will exit
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * 
+	 * @return Node as the exit laser node
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public Node getExit() {
 		return exit;
 	}
-
-	public void setExit(Node exit) {
-		this.exit = exit;
-	}
-
+	/**
+	 * This method makes the fire that the user type in the coordinates
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * <b><pre><br>Node to fire must be on the matrix size<br>
+	 * 
+	 * @param rowFire as integer of the row node to fire
+	 * @param colFire as integer of the column node to fire
+	 * @param director String as the direction (vertical or horizontal) to fire, only when are corners
+	 * 
+	 * @return found as boolean if the fire was executed or not
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public boolean fire(int rowFire, int colFire, String director) {
 		boolean found = !false;
 		String corner = "";
@@ -197,11 +270,11 @@ public class GameManager implements Serializable {
 		if(aim != null) {
 
 			if(!director.equalsIgnoreCase("")) {
-				corner = DetermineInitialDirectionatCorner(director, aim);
-				exit =	Shoot(aim, corner);
+				corner = startCourseSpecialCase(director, aim);
+				exit =	shot(aim, corner);
 			} else {
-				toGo = DetermineInitialDirection(aim);
-				exit =	Shoot(aim, toGo);
+				toGo = startCourse(aim);
+				exit =	shot(aim, toGo);
 			}
 			saveMirror();
 			aim.setState("S");
@@ -212,7 +285,12 @@ public class GameManager implements Serializable {
 		}
 		return found;
 	}
-
+	/**
+	 * This method saves the mirrors on the matrix view if the player already knew the position 
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * 
+	 * <b>post:</b><br>
+	 */
 	private void saveMirror() {
 
 		if(getAim().getState().equalsIgnoreCase("/")) {
@@ -229,7 +307,12 @@ public class GameManager implements Serializable {
 		}
 
 	}
-
+	/**
+	 * This method check from the boolean changed by saveMirror method if the player already knew a mirror, if a boolean is true, so returns the mirror to the matrix view
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public void validateState() {
 		if(c1) {
 			getAim().setState("/");
@@ -252,11 +335,23 @@ public class GameManager implements Serializable {
 		c3 = false;
 		c4 = false;
 	}
-
-	public boolean locate(int rowFire, int colFire, String direction) {
+	/**
+	 * This method makes the location to find a mirror by the user reference
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * <b><pre><br>Mirror to find must be on the matrix size, not out of it coordinates<br>
+	 * 
+	 * @param rowLoc as integer of the row node to localize
+	 * @param colLoc as integer of the column node to localize
+	 * @param director String as the direction (left or right) f the mirror
+	 * 
+	 * @return a boolean if in the coordinates type by the user and direction was a mirror or not
+	 * 
+	 * <b>post:</b><br>
+	 */
+	public boolean locate(int rowLoc, int colLoc, String direction) {
 		boolean point = !false;
 		String mirrorDirector;
-		Node toSearch = new Node(rowFire, colFire);
+		Node toSearch = new Node(rowLoc, colLoc);
 		Node returned = goByMatrix(toSearch, matrix.getFirst());
 		if(direction.equalsIgnoreCase("L")) {
 			mirrorDirector = "\\";
@@ -276,65 +371,101 @@ public class GameManager implements Serializable {
 		}
 		return point;
 	}
-
-	public void generateRandomMirrors(int m, int n, int k) {
+	/**
+	 * This method makes the mirrors in a random way
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * <b><pre><br>Mirrors quantity can not be more than the matrix size<br>
+	 * 
+	 * @param m as integer of the row 
+	 * @param n as integer of the column 
+	 * @param k as integer of the mirrors quantity
+	 * 
+	 * <b>post:</b><br>
+	 */
+	public void randomMirrors(int m, int n, int k) {
 		if(k != 0) {
-			int randomN = (int)(Math.random()*n+1)-1;
-			int randomM = (int)(Math.random()*m+1)-1;
+			int randomColumns = 0;
+			int randomRows = 0;
+			randomColumns = ((int)(Math.random()*n+1)-1);
+			randomRows = ((int)(Math.random()*m+1)-1);
 
-			Node aleatory = auxSearch(randomM, randomN);
-
-			if(aleatory.getMirror().equals("")) {
-				int mirrorRandom = (int)(Math.random()*2+1);
-				if(mirrorRandom==1) {
-					aleatory.setMirror("/");
-				}else if(mirrorRandom==2) {
-					aleatory.setMirror("\\");
+			Node rand = auxSearch(randomRows, randomColumns);
+			if(rand.getMirror().equals("")) {
+				int rand2 = (int)(Math.random()*2+1);
+				if(rand2 == 1) {
+					rand.setMirror("/");
+				}else {
+					rand.setMirror("\\");
 				}
-				generateRandomMirrors(m, n, k-1);
+				randomMirrors(m, n, k-1);
 			}else {
-				generateRandomMirrors(m, n, k);
+				randomMirrors(m, n, k);
 			}
 		}
 	}
 
-	public String DetermineInitialDirection(Node ToLocateStart) {
-		String InitialD = "";
-		if(ToLocateStart.getUp() == null) {
-			InitialD = "down";
-		}else if(ToLocateStart.getDown() == null) {
-			InitialD = "up";
-		}else if(ToLocateStart.getPrev() == null) {
-			InitialD = "right";
-		}else if(ToLocateStart.getNext() == null) {
-			InitialD = "left";
+	/**
+	 * This method define the first direction to make the laser fire, this method is not for the special case (corner fire)
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * 
+	 * @param nodeToGo as node of player want to make the fire
+	 * 
+	 * @return course String of the initial course
+	 * 
+	 * <b>post:</b><br>
+	 */
+	public String startCourse(Node nodeToGo) {
+		String course = "";
+		if(nodeToGo.getUp() == null) {
+			course = "down";
+		}else if(nodeToGo.getDown() == null) {
+			course = "up";
+		}else if(nodeToGo.getPrev() == null) {
+			course = "right";
+		}else if(nodeToGo.getNext() == null) {
+			course = "left";
 		}
-		return InitialD;
+		return course;
 	}
-
-	public String DetermineInitialDirectionatCorner(String orientation, Node ToLocateStart) {
-		String Direction = "";
-		if(ToLocateStart.getUp() == null ) {
-			if(orientation.equalsIgnoreCase("H") && ToLocateStart.getNext() == null) {
-				Direction = "left";
+	/**
+	 * This method define the first direction to make the laser fire when player wants to make it in a corner 
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * 
+	 * @param nodeToGo as node of player want to make the fire
+	 * 
+	 * @return course String of the initial course (horizontal or vertical)
+	 * @return go String of the initial course
+	 * 
+	 * <b>post:</b><br>
+	 */
+	public String startCourseSpecialCase(String course, Node nodeToGo) {
+		String go = "";
+		if(nodeToGo.getUp() == null ) {
+			if(course.equalsIgnoreCase("H") && nodeToGo.getNext() == null) {
+				go = "left";
 			}else {
-				Direction = "right";
-			}if(orientation.equalsIgnoreCase("V")) {
-				Direction = "down";
+				go = "right";
+			}if(course.equalsIgnoreCase("V")) {
+				go = "down";
 			}
 		}
-		else if(ToLocateStart.getDown() == null) {
-			if(orientation.equalsIgnoreCase("H") && ToLocateStart.getNext() == null) {
-				Direction = "left";
+		else if(nodeToGo.getDown() == null) {
+			if(course.equalsIgnoreCase("H") && nodeToGo.getNext() == null) {
+				go = "left";
 			}else {
-				Direction = "right";
-			} if(orientation.equalsIgnoreCase("V")) {
-				Direction = "up";
+				go = "right";
+			} if(course.equalsIgnoreCase("V")) {
+				go = "up";
 			}
 		}
-		return Direction;
+		return go;
 	}
-
+	/**
+	 * This method serialize the players information
+	 * <b><pre><br>Nothing<br>
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public void saveData() throws IOException{
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_PATH_FILE_SCORES));
 		//		oos.writeObject(getInfoScores());
@@ -352,63 +483,92 @@ public class GameManager implements Serializable {
 	//		}
 	//		return loaded;
 	//	}
-
-	public Node Shoot(Node ShootEnd, String initialTrayect) {
-		if(initialTrayect.equalsIgnoreCase("down")) {
-			if(ShootEnd.getDown() != null) {
-				if(ShootEnd.getDown().getMirror().equals("\\")) {
-					return Shoot(ShootEnd.getDown(), "right");
-				}else if(ShootEnd.getDown().getMirror().equals("/")) {
-					return 	Shoot(ShootEnd.getDown(), "left");
+	/**
+	 * This method makes the shot and go by the matrix depending of the course that the laser takes in a recursive way
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * 
+	 * @param current as node of laser is passes
+	 * @param course as Sting of course that laser goes
+	 * 
+	 * @return current when laser out of matrix
+	 * 
+	 * <b>post:</b><br>
+	 */
+	private Node shot(Node current, String course) {
+		if(course.equalsIgnoreCase("down")) {
+			if(current.getDown() != null) {
+				if(current.getDown().getMirror().equals("\\")) {
+					return shot(current.getDown(), "right");
+				}else if(current.getDown().getMirror().equals("/")) {
+					return shot(current.getDown(), "left");
 				}else {
-					return	Shoot(ShootEnd.getDown(), initialTrayect);
+					return shot(current.getDown(), course);
 				}
 			}
-			return ShootEnd;
+			return current;
 		}
-		if(initialTrayect.equalsIgnoreCase("up")) {
-			if(ShootEnd.getUp() != null) {
-				if(ShootEnd.getUp().getMirror().equals("\\")) {
-					return	Shoot(ShootEnd.getUp(), "left");
-				}else if(ShootEnd.getUp().getMirror().equals("/")) {
-					return	Shoot(ShootEnd.getUp(), "right");
+		if(course.equalsIgnoreCase("up")) {
+			if(current.getUp() != null) {
+				if(current.getUp().getMirror().equals("\\")) {
+					return	shot(current.getUp(), "left");
+				}else if(current.getUp().getMirror().equals("/")) {
+					return shot(current.getUp(), "right");
 				}else {
-					return	Shoot(ShootEnd.getUp(), initialTrayect);
+					return shot(current.getUp(), course);
 				}
 			}
-			return ShootEnd;
+			return current;
 		}
-		if(initialTrayect.equalsIgnoreCase("Right")) {
-			if(ShootEnd.getNext() != null) {
-				if(ShootEnd.getNext().getMirror().equals("\\")) {
-					return	Shoot(ShootEnd.getNext(), "down");
-				}else if(ShootEnd.getNext().getMirror().equals("/")) {
-					return	Shoot(ShootEnd.getNext(), "up");
+		if(course.equalsIgnoreCase("Right")) {
+			if(current.getNext() != null) {
+				if(current.getNext().getMirror().equals("\\")) {
+					return shot(current.getNext(), "down");
+				}else if(current.getNext().getMirror().equals("/")) {
+					return shot(current.getNext(), "up");
 				}else {
-					return	Shoot(ShootEnd.getNext(), initialTrayect);
+					return shot(current.getNext(), course);
 				}
 			}
-			return ShootEnd;
+			return current;
 		}
-		if(initialTrayect.equalsIgnoreCase("Left")) {
-			if(ShootEnd.getPrev() != null) {
-				if(ShootEnd.getPrev().getMirror().equals("\\")) {
-					return	Shoot(ShootEnd.getPrev(), "up");
-				}else if(ShootEnd.getPrev().getMirror().equals("/")) {
-					return	Shoot(ShootEnd.getPrev(), "down");
+		if(course.equalsIgnoreCase("Left")) {
+			if(current.getPrev() != null) {
+				if(current.getPrev().getMirror().equals("\\")) {
+					return shot(current.getPrev(), "up");
+				}else if(current.getPrev().getMirror().equals("/")) {
+					return shot(current.getPrev(), "down");
 				}else {
-					return	Shoot(ShootEnd.getPrev(), initialTrayect);
+					return shot(current.getPrev(), course);
 				}
 			}
 		}
-		return ShootEnd;
+		return current;
 	}
-
+	/**
+	 * This method makes a node search by typing the column and row, then call the goByMatrix method 
+	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * <b><pre><br>Node to search must be on the matrix size<br>
+	 * 
+	 * @param row as integer of the row 
+	 * @param col as integer of the column 
+	 * 
+	 * @return returns the node by goByMatrix method if found, otherwise, returns null
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public Node auxSearch(int row, int col) {
 		Node toReturn  = new Node(row, col);
 		return goByMatrix(toReturn, matrix.getFirst());
 	}
-
+	/**
+	 * This method makes a linked matrix 
+	 * <b><pre><br>Nothing<br>
+	 * 
+	 * @param m as integer of the row size
+	 * @param n as integer of the column size
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public void addMatrix(int m, int n) {
 		matrix = new LinkedMatrix(m, n);
 	}

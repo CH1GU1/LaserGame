@@ -83,7 +83,7 @@ public class Menu {
 		int k = Integer.parseInt(parts[3]);
 		gm.addMatrix(m, n);
 		if(k <= m*n) {
-			gm.generateRandomMirrors(m, n, k);
+			gm.randomMirrors(m, n, k);
 			fireLocCheatCoordinates(false, m, n, true, nickName, k, initialScore);
 			gm.saveData();
 		} else {
