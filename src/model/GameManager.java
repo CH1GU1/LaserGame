@@ -1,12 +1,25 @@
 package model;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-public class GameManager {
+public class GameManager implements Serializable {
 
-	LinkedMatrix matrix;
+	private static final long serialVersionUID = 1L;
+	public final static String SAVE_PATH_FILE_SCORES = "data/scores.ap2";
+	private LinkedMatrix matrix;
 	private Node exit;
+	private Node aim;
 	private Player root;
-	private String infoScores;
+	private boolean c1 = false;
+	private boolean c2 = false;
+	private boolean c3 = false;
+	private boolean c4 = false;
 
 	public GameManager() {
 		exit = null;
@@ -18,17 +31,18 @@ public class GameManager {
 		return root;
 	}
 
+	public Node getAim() {
+		return aim;
+	}
+
+	public void setAim(Node aim) {
+		this.aim = aim;
+	}
+
 	public LinkedMatrix getMatrix() {
 		return matrix;
 	}
 
-	public String getInfoScores() {
-		return infoScores;
-	}
-
-	public void setInfoScores(String infoScores) {
-		this.infoScores = infoScores;
-	}
 
 	public void addPlayer(String nickName, long score) {
 		Player toAdd = new Player(nickName, score);
@@ -47,33 +61,86 @@ public class GameManager {
 		} else {
 			if(newPlayer.getScore() < currentPlayer.getScore() && currentPlayer.getLeft() != null) {
 				addPlayer(currentPlayer.getLeft(), newPlayer);
-			} else {
+				return;
+			} 
+			else {
 				addPlayer(currentPlayer.getRight(), newPlayer);
+				return;
 			}
 		}
 	}
 
-	public void printInOrder() {
+	public String printInOrder() {
+		String info = "";
 		if(root == null) {
 			//nothing
 		} else {
-			printInOrder(root);
+			info = printInOrder(root,"", 1);
+		}
+		return info;
+	}
+
+	private String printInOrder(Player ply, String infoScores, int num) {
+		if (ply == null) 
+			return infoScores; 
+
+		/* first recursion on left child */
+		printInOrder(ply.getLeft(), infoScores, num);
+
+		/* then print the data of node */
+		infoScores += ""+num+ ". Nickname: "+ply.getNickName()+"\nScore: "+ply.getScore()+"\n"; 
+
+		/* now recursion on right child */
+		return printInOrder(ply.getRight(), infoScores, num+1); 
+
+	} 
+
+	public void cheatMode(int m, int n) {
+
+	}
+	
+	public void runCheat(Node n) {
+		if(n == null) {
+			//nada
+		} else {
+			runLeftToRight(n);
+			runCheat(n.getDown());
 		}
 	}
 	
-	private void printInOrder(Player ply) { 
-		if (ply == null) 
-			return; 
+	public void runLeftToRight(Node n) {
+		if(n == null) {
+			//nada
+		} else {
+			n.setState(n.getMirror());
+			runLeftToRight(n.getNext());
+		}
+	}
+	
+	public Node goByMatrix(Node toSearch, Node n) {
+		if(n == null) {
+			//nothing
+		} 
+		Node found = goBymatrixLeftToRight(toSearch, n);
+		if(found == null) {
+			return goByMatrix(toSearch, n.getDown());
+		}
+		return found;
+	}
 
-		/* first recur on left child */
-		printInOrder(ply.getLeft()); 
+	private Node goBymatrixLeftToRight(Node toSearch, Node n) {
+		Node found = null;
+		if(n == null) {
+			//nothing
+		} else if(toSearch.getNameCol() == n.getNameCol() && toSearch.getRow() == n.getRow()){
+			found = n;
+			return found;
+		} else {
+			return goBymatrixLeftToRight(toSearch, n.getNext());
+		}
+		return found;
 
-		/* then print the data of node */
-		infoScores += "Nickname: "+ply.getNickName()+"\nScore: "+ply.getScore()+"\n"; 
-
-		/* now recur on right child */
-		printInOrder(ply.getRight()); 
-	} 
+	}
 
 	public Node getExit() {
 		return exit;
@@ -88,22 +155,64 @@ public class GameManager {
 		String corner = "";
 		String toGo = "";
 		Node toSearch = new Node(rowFire, colFire);
-		Node returned = goByMatrix(toSearch, matrix.getFirst());
-		if(returned != null) {
-			returned.setState("S");
+		aim = goByMatrix(toSearch, matrix.getFirst());
+		if(aim != null) {
+
 			if(!director.equalsIgnoreCase("")) {
-				corner = DetermineInitialDirectionatCorner(director, returned);
-				exit =	Shoot(returned, corner);
+				corner = DetermineInitialDirectionatCorner(director, aim);
+				exit =	Shoot(aim, corner);
 			} else {
-				toGo = DetermineInitialDirection(returned);
-				exit =	Shoot(returned, toGo);
+				toGo = DetermineInitialDirection(aim);
+				exit =	Shoot(aim, toGo);
 			}
+			saveMirror();
+			aim.setState("S");
 			exit.setState("E");
 			found = true;
 		} else {
 			found = false;
 		}
 		return found;
+	}
+
+	private void saveMirror() {
+
+		if(getAim().getState().equalsIgnoreCase("/")) {
+			c1 = true;
+		} 
+		if(getAim().getState().equalsIgnoreCase("\\")) {
+			c2 = true;
+		}
+		if(getExit().getState().equalsIgnoreCase("/")) {
+			c3 = true;
+		}
+		if(getExit().getState().equalsIgnoreCase("\\")) {
+			c4 = true;
+		}
+
+	}
+
+	public void validateState() {
+		if(c1) {
+			getAim().setState("/");
+		}
+		else if(c2) {
+			getAim().setState("\\");
+		} else {
+			getAim().setState("");
+		}
+		if(c3) {
+			getExit().setState("/");
+		}
+		else if(c4) {
+			getExit().setState("\\");
+		} else {
+			getExit().setState("");
+		}
+		c1 = false;
+		c2 = false;
+		c3 = false;
+		c4 = false;
 	}
 
 	public boolean locate(int rowFire, int colFire, String direction) {
@@ -188,6 +297,24 @@ public class GameManager {
 		return Direction;
 	}
 
+	public void saveData() throws IOException{
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_PATH_FILE_SCORES));
+		//		oos.writeObject(getInfoScores());
+		oos.close();
+	} 
+//	public boolean loadData() throws IOException, ClassNotFoundException{
+//		File r = new File(SAVE_PATH_FILE_SCORES);
+//		boolean loaded = false;
+//		if(r.exists()){
+//			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(r));
+//			
+//			infoScores = (String)ois.readObject();
+//			loaded = true;
+//			ois.close();	
+//		}
+//		return loaded;
+//	}
+
 	public Node Shoot(Node ShootEnd, String initialTrayect) {
 		if(initialTrayect.equalsIgnoreCase("down")) {
 			if(ShootEnd.getDown() != null) {
@@ -242,30 +369,6 @@ public class GameManager {
 	public Node auxSearch(int row, int col) {
 		Node toReturn  = new Node(row, col);
 		return goByMatrix(toReturn, matrix.getFirst());
-	}
-
-	public Node goByMatrix(Node toSearch, Node n) {
-		if(n == null) {
-			//nothing
-		} 
-		Node found = goBymatrixLeftToRight(toSearch, n);
-		if(found == null) {
-			return goByMatrix(toSearch, n.getDown());
-		}
-		return found;
-	}
-	private Node goBymatrixLeftToRight(Node toSearch, Node n) {
-		Node found = null;
-		if(n == null) {
-			//nothing
-		} else if(toSearch.getNameCol() == n.getNameCol() && toSearch.getRow() == n.getRow()){
-			found = n;
-			//return found;
-		} else {
-			return goBymatrixLeftToRight(toSearch, n.getNext());
-		}
-		return found;
-
 	}
 
 	public void addMatrix(int m, int n) {

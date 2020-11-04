@@ -1,18 +1,12 @@
 package ui;
 
 
-//import java.io.BufferedReader;
-//import java.io.BufferedWriter;
-//import java.io.IOException;
-//import java.io.InputStreamReader;
-//import java.io.OutputStreamWriter;
+import java.io.IOException;
 import java.util.Scanner;
 import model.GameManager;
 
 
 public class Menu {
-	//	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	//	BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
 	static Scanner sc;
 	final static int EXIT_MENU = 3;
@@ -38,7 +32,6 @@ public class Menu {
 		return menu;
 	}
 
-
 	/**
 	 * This method receives the menu option .
 	 * <b>pre:</b>Select a valid option.<br>
@@ -49,7 +42,12 @@ public class Menu {
 		switch (option) {
 		case 1:
 			System.out.println("~~~~~~~~~~ PLAYING ~~~~~~~~~~");
-			play();
+			try {
+				play();
+				System.out.println("Data saved!");
+			} catch (IOException e) {
+				System.out.println("Data can not be saved!!");
+			}
 			break;
 		case 2:
 			System.out.println("~~~~~~~~~~ SCORES ~~~~~~~~~~");
@@ -64,7 +62,15 @@ public class Menu {
 		}
 	}
 
-	private void play() {
+	/**
+	 * This method receives the Nickname, Number of columns, number of rows and number of mirrors in a line, then serialize the players information.
+	 * <b>pre:</b>Enter the values in a line.<br>
+	 * 
+	 * @throws IOException
+	 * <b>post:</b><br>
+	 * 
+	 */
+	private void play() throws IOException {
 		System.out.println("Please enter the Nickname, Number of columns, cumber of rows and number of mirrors in a line");
 		String line = sc.nextLine();
 		String [] parts = line.split(" ");
@@ -76,36 +82,68 @@ public class Menu {
 		gm.addMatrix(m, n);
 		if(k <= m*n) {
 			gm.generateRandomMirrors(m, n, k);
-			fireCoordinates(false, m, n, 1, nickName, k, initialScore);
+			fireLocCheatCoordinates(false, m, n, true, nickName, k, initialScore);
+			gm.saveData();
 		} else {
 			System.out.println("Mirrors must be minors than the matrix size");
 		}
 	}
 
-	private void fireCoordinates(boolean stop,int m, int n, int count, String nickName, int k, long score) {
+	/**
+	 * This method can do a shot, localize, go to menu or activate the cheat mode
+	 * <b>pre:</b>Matrix already created.<br>
+	 * <b>pre:</b>The following coordinates must be correctly aboute the matrix size created<br>
+	 * 
+	 * @param stop Boolean is a boolean to stop the recursive method 
+	 * @param m integer is the rows of matrix
+	 * @param n integer is the columns of matrix
+	 * @param count boolean is just boolean to make the first one "if bloke" 
+	 * @param nickName String is the player nickName
+	 * @param k integer of the total
+	 * @param score long player score
+	 * 
+	 * <b>post:</b><br>
+	 * 
+	 */
+	private void fireLocCheatCoordinates(boolean stop,int m, int n, boolean key, String nickName, int k, long score) {
 		stop = false;
-		if (count > 0) {
+		if (key) {
 			System.out.println("--------- LASER MATRIX ---------");
 			System.out.println(nickName+": "+k+"mirrors remaining");
 			System.out.println(gm.getMatrix());
-			System.out.println("Type menu to exit, L to locate or coordinate to fire");
-		} else {
+			System.out.println("Type menu to exit, L+coordinates to localize a mirror, type a coordinate to fire or type the word cheat to see mirrors");
+		} else if (k == 0) {
+			stop = true;
+		} else if(stop != true){
 			System.out.println(nickName+": "+k+"mirrors remaining");
-			System.out.println("Type menu to exit, L to locate or coordinate to fire");
+			System.out.println("Type menu to exit, L+coordinates to localize a mirror, type a coordinate to fire or type the word cheat to see mirrors");
 		}
-		String fire = sc.nextLine();
-		String [] fParts = fire.split("");
-		if(fire.equalsIgnoreCase("Menu") || stop == true || k == 0) {
+		if(stop == true || k == 0) {
 			//exit
 			if(k == 0) {
 				System.out.println("You won!!!");
 				gm.addPlayer(nickName, score);
+
 			} else {
+				System.out.println("Leaving...");
 				gm.addPlayer(nickName, score);
 			}
 			stop = true;
-
-		} else if(fParts[0].equalsIgnoreCase("L")){
+			return;
+		}
+		String fire = sc.nextLine();
+		String [] fParts = fire.split("");
+		if(fire.equalsIgnoreCase("cheat")) {
+			gm.runCheat(gm.getMatrix().getFirst());
+			System.out.println(gm.getMatrix());
+			fireLocCheatCoordinates(stop, m, n, true, nickName, k, score);
+		}
+		else if(fire.equalsIgnoreCase("menu")) {
+			stop = true;
+			System.out.println("Leaving to menu...");
+			gm.addPlayer(nickName, score);
+		}
+		else if(fParts[0].equalsIgnoreCase("L")){
 			boolean mirrorFound = false;
 			int kRest = 0;
 			long scoreMult = 0;
@@ -125,10 +163,11 @@ public class Menu {
 				scoreMult = 100;
 			}
 			System.out.println(gm.getMatrix());
-			fireCoordinates(stop, m, n, count-1, nickName, k-kRest, score+scoreMult);
+			fireLocCheatCoordinates(stop, m, n, false, nickName, k-kRest, score+scoreMult);
 
 		} else {
 			//*********** Fire ****************************
+
 			int rowFire = Integer.parseInt(fParts[0]);
 			char colFireChar = fParts[1].charAt(0);
 			int colFire = colFireChar;
@@ -143,8 +182,7 @@ public class Menu {
 				} else {
 					System.out.println("Fired!!");
 					System.out.println(gm.getMatrix());
-					gm.auxSearch(rowFire-1, colToFire).setState("");
-					gm.getExit().setState("");
+					gm.validateState();
 				}
 			} else {
 				System.out.println("Coordinates out of matrix!!");
@@ -152,22 +190,43 @@ public class Menu {
 			System.out.println("--------- LASER MATRIX ---------");
 			System.out.println(nickName+": "+k+"mirrors remaining");
 			System.out.println(gm.getMatrix());
-			fireCoordinates(stop, m, n, count-1, nickName, k, score);
+			fireLocCheatCoordinates(stop, m, n, false, nickName, k, score);
 		}
 	}
 
+	/**
+	 * This method show the players scores table 
+	 * <b>pre:</b><br>
+	 * 
+	 * <b>post:</b><br>
+	 * 
+	 */
 	private void showScoresInOrder() {
-		gm.setInfoScores("");
-		gm.printInOrder();
-		if(gm.getInfoScores().equalsIgnoreCase("")) {
+
+		if(gm.printInOrder().isEmpty()) {
 			System.out.println("***** There no scores yet ******");
 		} else {
-			System.out.println(gm.getInfoScores());	
+			System.out.println(gm.printInOrder());	
 		}
 	}
 
-
-
+	/**
+	 * This method deserialize the score table
+	 * <b>pre:</b><br>
+	 * 
+	 * 
+	 * <b>post:</b><br>
+	 * 
+	 */
+//	private void loadProgram() {
+//		System.out.println("Loading data ...");
+//		try{
+//			gm.loadData();
+//			System.out.println("The program data were loaded succesfully");
+//		}catch(IOException | ClassNotFoundException e){
+//			System.out.println("The data can't be load");
+//		}
+//	}
 
 
 
@@ -189,11 +248,16 @@ public class Menu {
 	 * <b>post:</b><br>
 	 */
 	public void startMenu() {
+//		loadProgram();
 		String menu = getMenu();
 		int option = 0;
 		recursiveMenu(option, menu);
 	}
-
+	/**
+	 *This method open the menu and keeps recursive until 3 is pressed
+	 *<b>pre:</b> <br>
+	 *<b>post:</b>d<br>
+	 */
 	public void recursiveMenu(int option, String menu) {
 		if(option == EXIT_MENU) {
 			//nothing
