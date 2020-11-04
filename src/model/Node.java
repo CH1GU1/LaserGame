@@ -2,6 +2,8 @@ package model;
 
 public class Node {
 
+	//Initialization and constants declaration
+	
 	private int row;
 	private int col;
 	private String mirror;
@@ -27,7 +29,6 @@ public class Node {
 		mirror = "";
 		state = "";
 	}
-
 	/**
 	 * This method gets the mirror
 	 * <b><pre>:<br><br>

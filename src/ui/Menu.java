@@ -8,6 +8,8 @@ import model.GameManager;
 
 public class Menu {
 
+	//Initialization and constants declaration
+	
 	static Scanner sc;
 	final static int EXIT_MENU = 3;
 	private GameManager gm = new GameManager();

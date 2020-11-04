@@ -3,6 +3,8 @@ package model;
 import java.io.Serializable;
 
 public class Player implements Serializable{
+	
+	//Initialization and constants declaration
 
 	private static final long serialVersionUID = 1L;
 	private String nickName;

@@ -2,6 +2,8 @@ package model;
 
 public class LinkedMatrix {
 
+	//Initialization and constants declaration
+	
 	private Node first;
 	private int m;
 	private int n;

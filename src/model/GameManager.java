@@ -10,6 +10,8 @@ import java.io.Serializable;
 
 public class GameManager implements Serializable {
 
+	//Initialization and constants declaration
+
 	private static final long serialVersionUID = 1L;
 	public final static String SAVE_PATH_FILE_SCORES = "data/scores.ap2";
 	private LinkedMatrix matrix;
@@ -21,6 +23,13 @@ public class GameManager implements Serializable {
 	private boolean c3 = false;
 	private boolean c4 = false;
 
+	/**
+	 *  This method is the constructor of GameManager
+	 * <b><pre>:<br><br>
+	 * 
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public GameManager() {
 		exit = null;
 		matrix = null;
@@ -98,7 +107,7 @@ public class GameManager implements Serializable {
 	public void cheatMode(int m, int n) {
 
 	}
-	
+
 	public void runCheat(Node n) {
 		if(n == null) {
 			//nada
@@ -107,7 +116,7 @@ public class GameManager implements Serializable {
 			runCheat(n.getDown());
 		}
 	}
-	
+
 	public void runLeftToRight(Node n) {
 		if(n == null) {
 			//nada
@@ -116,7 +125,7 @@ public class GameManager implements Serializable {
 			runLeftToRight(n.getNext());
 		}
 	}
-	
+
 	public Node goByMatrix(Node toSearch, Node n) {
 		if(n == null) {
 			//nothing
@@ -302,18 +311,18 @@ public class GameManager implements Serializable {
 		//		oos.writeObject(getInfoScores());
 		oos.close();
 	} 
-//	public boolean loadData() throws IOException, ClassNotFoundException{
-//		File r = new File(SAVE_PATH_FILE_SCORES);
-//		boolean loaded = false;
-//		if(r.exists()){
-//			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(r));
-//			
-//			infoScores = (String)ois.readObject();
-//			loaded = true;
-//			ois.close();	
-//		}
-//		return loaded;
-//	}
+	//	public boolean loadData() throws IOException, ClassNotFoundException{
+	//		File r = new File(SAVE_PATH_FILE_SCORES);
+	//		boolean loaded = false;
+	//		if(r.exists()){
+	//			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(r));
+	//			
+	//			infoScores = (String)ois.readObject();
+	//			loaded = true;
+	//			ois.close();	
+	//		}
+	//		return loaded;
+	//	}
 
 	public Node Shoot(Node ShootEnd, String initialTrayect) {
 		if(initialTrayect.equalsIgnoreCase("down")) {
