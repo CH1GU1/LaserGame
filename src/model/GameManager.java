@@ -35,11 +35,25 @@ public class GameManager implements Serializable {
 		matrix = null;
 		root = null;
 	}
-
+	/**
+	 * This method gets the first player on the binary tree 
+	 * <b><pre><br><br>
+	 * 
+	 * @return root
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public Player getRoot() {
 		return root;
 	}
-
+	/**
+	 * This method gets the node that the user want to fire 
+	 * <b><pre><br>Coordinates must be on the matrix coordinates<br>
+	 * 
+	 * @return aim
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public Node getAim() {
 		return aim;
 	}
@@ -47,12 +61,27 @@ public class GameManager implements Serializable {
 	public void setAim(Node aim) {
 		this.aim = aim;
 	}
-
+	/**
+	 * This method gets the matrix
+	 * <b><pre><br>Matrix must be created<br>
+	 * 
+	 * @return matrix
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public LinkedMatrix getMatrix() {
 		return matrix;
 	}
 
-
+	/**
+	 * This add a player to the binary tree
+	 * <b><pre><br>Players must be have different scores cause is saved to a binary tree<br>
+	 * 
+	 * @param nickName String as the player nick name
+	 * @param score long as the player score
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public void addPlayer(String nickName, long score) {
 		Player toAdd = new Player(nickName, score);
 		if(root == null) {
