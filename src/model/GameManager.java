@@ -12,7 +12,6 @@ public class GameManager {
 
 	//Initialization and constants declaration
 
-	private static final long serialVersionUID = 1L;
 	public final static String SAVE_PATH_FILE_SCORES = "data/scores.ap2";
 	private LinkedMatrix matrix;
 	private Node exit;
