@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-public class GameManager implements Serializable {
+public class GameManager {
 
 	//Initialization and constants declaration
 
