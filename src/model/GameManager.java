@@ -1,19 +1,11 @@
 package model;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 public class GameManager {
 
 	//Initialization and constants declaration
 
 	public final static String SAVE_PATH_FILE_SCORES = "data/scores.ap2";
 	private LinkedMatrix matrix;
+	private String infoScores;
 	private Node exit;
 	private Node aim;
 	private Player root;
@@ -106,11 +98,8 @@ public class GameManager {
 		} else {
 			if(newPlayer.getScore() < currentPlayer.getScore() && currentPlayer.getLeft() != null) {
 				addPlayer(currentPlayer.getLeft(), newPlayer);
-				return;
-			} 
-			else {
+			} else {
 				addPlayer(currentPlayer.getRight(), newPlayer);
-				return;
 			}
 		}
 	}
@@ -127,7 +116,9 @@ public class GameManager {
 		if(root == null) {
 			//nothing
 		} else {
-			info = printInOrder(root,"", 1);
+			infoScores = "";
+			printInOrder(root, 1);
+			info = infoScores;
 		}
 		return info;
 	}
@@ -143,19 +134,18 @@ public class GameManager {
 	 * 
 	 * <b>post:</b>Player on the binary tree were deploy<br>
 	 */
-	private String printInOrder(Player ply, String infoScores, int num) {
-		if (ply == null) 
-			return infoScores; 
+	private void printInOrder(Player ply, int num) {
+		if (ply == null) {
+			//nothing
+		} else {
+			/* first recursion on left child */
+			printInOrder(ply.getLeft(), num+1);
 
-		/* first recursion on left child */
-		printInOrder(ply.getLeft(), infoScores, num);
+			/* then print the data of node */
+			infoScores += ""+num+ ". Nickname: "+ply.getNickName()+"\nScore: "+ply.getScore()+"\n"; 
 
-		/* then print the data of node */
-		infoScores += ""+num+ ". Nickname: "+ply.getNickName()+"\nScore: "+ply.getScore()+"\n"; 
-
-		/* now recursion on right child */
-		return printInOrder(ply.getRight(), infoScores, num+1); 
-
+			printInOrder(ply.getRight(), num+1); 
+		}
 	} 
 	/**
 	 * This is the public recursive method to enable the cheat mode to reveal the mirrors on the game
@@ -528,29 +518,6 @@ public class GameManager {
 		}
 		return go;
 	}
-	/**
-	 * This method serialize the players information
-	 * <b><pre><br>Nothing<br>
-	 * 
-	 * <b>post:</b><br>
-	 */
-	public void saveData() throws IOException{
-		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_PATH_FILE_SCORES));
-		//		oos.writeObject(getInfoScores());
-		oos.close();
-	} 
-	//	public boolean loadData() throws IOException, ClassNotFoundException{
-	//		File r = new File(SAVE_PATH_FILE_SCORES);
-	//		boolean loaded = false;
-	//		if(r.exists()){
-	//			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(r));
-	//			
-	//			infoScores = (String)ois.readObject();
-	//			loaded = true;
-	//			ois.close();	
-	//		}
-	//		return loaded;
-	//	}
 	/**
 	 * This method makes the shot and go by the matrix depending of the course that the laser takes in a recursive way
 	 * <b><pre><br>Matrix must be created, thats mean, playing<br>

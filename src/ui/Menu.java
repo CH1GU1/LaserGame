@@ -33,7 +33,26 @@ public class Menu {
 		menu += "Please enter an option\n";
 		return menu;
 	}
+	public final static void clearConsole()
+	{
+	    try
+	    {
+	        final String os = System.getProperty("os.name");
 
+	        if (os.contains("Windows"))
+	        {
+	            Runtime.getRuntime().exec("cls");
+	        }
+	        else
+	        {
+	            Runtime.getRuntime().exec("clear");
+	        }
+	    }
+	    catch (final Exception e)
+	    {
+	        //  Handle any exceptions.
+	    }
+	}
 	/**
 	 * This method receives the menu option .
 	 * <b>pre:</b>Select a valid option.<br>
@@ -50,6 +69,7 @@ public class Menu {
 			} catch (IOException e) {
 				System.out.println("Data can not be saved!!");
 			}
+			clearConsole();
 			break;
 		case 2:
 			System.out.println("~~~~~~~~~~ SCORES ~~~~~~~~~~");
@@ -63,7 +83,6 @@ public class Menu {
 			break;
 		}
 	}
-
 	/**
 	 * This method receives the Nickname, Number of columns, number of rows and number of mirrors in a line, then serialize the players information.
 	 * <b>pre:</b>Enter the values in a line.<br>
@@ -77,7 +96,7 @@ public class Menu {
 		String line = sc.nextLine();
 		String [] parts = line.split(" ");
 		String nickName = (parts[0]);
-		long initialScore = 50;
+		long initialScore = 1000;
 		int n = Integer.parseInt(parts[1]);
 		int m = Integer.parseInt(parts[2]);
 		int k = Integer.parseInt(parts[3]);
@@ -85,12 +104,10 @@ public class Menu {
 		if(k <= m*n) {
 			gm.randomMirrors(m, n, k);
 			fireLocCheatCoordinates(false, m, n, true, nickName, k, initialScore);
-			gm.saveData();
 		} else {
 			System.out.println("Mirrors must be minors than the matrix size");
 		}
 	}
-
 	/**
 	 * This method can do a shot, localize, go to menu or activate the cheat mode
 	 * <b>pre:</b>Matrix already created.<br>
@@ -146,7 +163,6 @@ public class Menu {
 			gm.addPlayer(nickName, score);
 		}
 		else if(fire.charAt(0) == 'L'){
-			boolean mirrorFound = false;
 			int kRest = 0;
 			long scoreMult = 0;
 			int rowFire = 0;
@@ -160,12 +176,12 @@ public class Menu {
 			if(gm.locate(rowFire-1, colFire, directorMirror) == false) {
 				System.out.println(gm.getMatrix());
 				gm.auxSearch(rowFire-1, colFire).setState("");
+				scoreMult = -200;
+				System.out.println("Incorrect! -200 points!");
 			} else {
-				mirrorFound = true;
-			}
-			if(mirrorFound == true) {
 				kRest = 1;
 				scoreMult = 100;
+				System.out.println("Correct! +100 points");
 			}
 			System.out.println(gm.getMatrix());
 			fireLocCheatCoordinates(stop, m, n, false, nickName, k-kRest, score+scoreMult);
@@ -222,7 +238,6 @@ public class Menu {
 		System.out.println(gm.getMatrix());
 		fireLocCheatCoordinates(stop, m, n, false, nickName, k, score);
 	}
-
 	/**
 	 * This method show the players scores table 
 	 * <b>pre:</b><br>
@@ -238,26 +253,6 @@ public class Menu {
 			System.out.println(gm.printInOrder());	
 		}
 	}
-
-	/**
-	 * This method deserialize the score table
-	 * <b>pre:</b><br>
-	 * 
-	 * 
-	 * <b>post:</b><br>
-	 * 
-	 */
-	//	private void loadProgram() {
-	//		System.out.println("Loading data ...");
-	//		try{
-	//			gm.loadData();
-	//			System.out.println("The program data were loaded succesfully");
-	//		}catch(IOException | ClassNotFoundException e){
-	//			System.out.println("The data can't be load");
-	//		}
-	//	}
-
-
 
 	//***************** UI execute ***************************************** 
 
