@@ -9,7 +9,7 @@ import model.GameManager;
 public class Menu {
 
 	//Initialization and constants declaration
-	
+
 	static Scanner sc;
 	final static int EXIT_MENU = 3;
 	private GameManager gm = new GameManager();
@@ -134,7 +134,7 @@ public class Menu {
 			return;
 		}
 		String fire = sc.nextLine();
-		String [] fParts = fire.split("");
+		int size = fire.length();
 		if(fire.equalsIgnoreCase("cheat")) {
 			gm.runCheat(gm.getMatrix().getFirst());
 			System.out.println(gm.getMatrix());
@@ -145,18 +145,21 @@ public class Menu {
 			System.out.println("Leaving to menu...");
 			gm.addPlayer(nickName, score);
 		}
-		else if(fParts[0].equalsIgnoreCase("L")){
+		else if(fire.charAt(0) == 'L'){
 			boolean mirrorFound = false;
 			int kRest = 0;
 			long scoreMult = 0;
-			int rowFire = Integer.parseInt(fParts[1]);
-			char colFireChar = fParts[2].charAt(0);
-			int colFire = colFireChar;
-			int colToFire = (char)(colFire-'A');
-			String directorMirror = (fParts[3]);
-			if(gm.locate(rowFire-1, colToFire, directorMirror) == false) {
+			int rowFire = 0;
+			int colFire = 0;
+			char colToFire = 'x';
+			String directorMirror = "";
+			rowFire = Integer.parseInt(fire.substring(1, size-2));
+			colToFire = fire.substring(size-2, size-1).charAt(0);
+			colFire = (char)(colToFire -'A');
+			directorMirror = fire.substring(size-1, size);
+			if(gm.locate(rowFire-1, colFire, directorMirror) == false) {
 				System.out.println(gm.getMatrix());
-				gm.auxSearch(rowFire-1, colToFire).setState("");
+				gm.auxSearch(rowFire-1, colFire).setState("");
 			} else {
 				mirrorFound = true;
 			}
@@ -168,32 +171,56 @@ public class Menu {
 			fireLocCheatCoordinates(stop, m, n, false, nickName, k-kRest, score+scoreMult);
 
 		} else {
-			//*********** Fire ****************************
-
-			int rowFire = Integer.parseInt(fParts[0]);
-			char colFireChar = fParts[1].charAt(0);
-			int colFire = colFireChar;
-			int colToFire = (char)(colFire-'A');
-			String directorFire = "";
-			if(fParts.length == 3) {
-				directorFire = (fParts[2]);
-			}
-			if(rowFire-1 < m && colToFire < n) {
-				if(gm.fire(rowFire-1, colToFire, directorFire) == false) {
-					System.out.println("Fire can not be executed");
-				} else {
-					System.out.println("Fired!!");
-					System.out.println(gm.getMatrix());
-					gm.validateState();
-				}
-			} else {
-				System.out.println("Coordinates out of matrix!!");
-			}
-			System.out.println("--------- LASER MATRIX ---------");
-			System.out.println(nickName+": "+k+"mirrors remaining");
-			System.out.println(gm.getMatrix());
-			fireLocCheatCoordinates(stop, m, n, false, nickName, k, score);
+			fire(fire, size, m, n, nickName, k, stop, score);
 		}
+	}
+	/**
+	 * This method makes the fire
+	 * <b>pre:</b>Matrix already created.<br>
+	 * <b>pre:</b>The following coordinates must be correctly about the matrix size created<br>
+	 * 
+	 * @param stop Boolean is a boolean to stop the recursive method 
+	 * @param m integer is the rows of matrix
+	 * @param n integer is the columns of matrix
+	 * @param count boolean is just boolean to make the first one "if bloke" 
+	 * @param nickName String is the player nickName
+	 * @param k integer of the total
+	 * @param score long player score
+	 * 
+	 * <b>post:</b><br>
+	 * 
+	 */
+	private void fire(String fire, int size, int m, int n, String nickName, int k, boolean stop, long score ) {
+		//*********** Fire ****************************
+		int rowFire = 0;
+		int colFire = 0;
+		char colToFire = 'x';
+		String directorFire = "";
+		if (Character.isLetter(fire.charAt(size-2))) {
+			rowFire = Integer.parseInt(fire.substring(0, size-2));
+			colToFire = fire.substring(size-2, size-1).charAt(0);
+			colFire = (char)(colToFire -'A');
+			directorFire = fire.substring(size-1, size);
+		} else {
+			rowFire = Integer.parseInt(fire.substring(0, size-1));
+			colToFire = fire.substring(size-1, size).charAt(0);
+			colFire = (char)(colToFire -'A');
+		}
+		if(rowFire-1 < m && colFire < n) {
+			if(gm.fire(rowFire-1, colFire, directorFire) == false) {
+				System.out.println("Fire can not be executed");
+			} else {
+				System.out.println("Fired!!");
+				System.out.println(gm.getMatrix());
+				gm.validateState();
+			}
+		} else {
+			System.out.println("Coordinates out of matrix!!");
+		}
+		System.out.println("--------- LASER MATRIX ---------");
+		System.out.println(nickName+": "+k+"mirrors remaining");
+		System.out.println(gm.getMatrix());
+		fireLocCheatCoordinates(stop, m, n, false, nickName, k, score);
 	}
 
 	/**
@@ -220,15 +247,15 @@ public class Menu {
 	 * <b>post:</b><br>
 	 * 
 	 */
-//	private void loadProgram() {
-//		System.out.println("Loading data ...");
-//		try{
-//			gm.loadData();
-//			System.out.println("The program data were loaded succesfully");
-//		}catch(IOException | ClassNotFoundException e){
-//			System.out.println("The data can't be load");
-//		}
-//	}
+	//	private void loadProgram() {
+	//		System.out.println("Loading data ...");
+	//		try{
+	//			gm.loadData();
+	//			System.out.println("The program data were loaded succesfully");
+	//		}catch(IOException | ClassNotFoundException e){
+	//			System.out.println("The data can't be load");
+	//		}
+	//	}
 
 
 
@@ -250,7 +277,7 @@ public class Menu {
 	 * <b>post:</b><br>
 	 */
 	public void startMenu() {
-//		loadProgram();
+		//		loadProgram();
 		String menu = getMenu();
 		int option = 0;
 		recursiveMenu(option, menu);

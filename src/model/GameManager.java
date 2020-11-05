@@ -207,7 +207,7 @@ public class GameManager {
 		} 
 		Node found = goBymatrixLeftToRight(toSearch, n);
 		if(found == null) {
-			return goByMatrix(toSearch, n.getDown());
+			found = goByMatrix(toSearch, n.getDown());
 		}
 		return found;
 	}
@@ -226,10 +226,10 @@ public class GameManager {
 	private Node goBymatrixLeftToRight(Node toSearch, Node n) {
 		Node found = null;
 		if(n == null) {
-			//nothing
+			return found;
 		} else if(toSearch.getNameCol() == n.getNameCol() && toSearch.getRow() == n.getRow()){
 			found = n;
-			return found;
+			//			return found;
 		} else {
 			return goBymatrixLeftToRight(toSearch, n.getNext());
 		}
@@ -625,7 +625,8 @@ public class GameManager {
 	 * <b>post:</b><br>
 	 */
 	public Node auxSearch(int row, int col) {
-		Node toReturn  = new Node(row, col);
+		Node toReturn = null;
+		toReturn = new Node(row, col);
 		return goByMatrix(toReturn, matrix.getFirst());
 	}
 	/**
