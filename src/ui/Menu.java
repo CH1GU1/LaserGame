@@ -266,7 +266,7 @@ public class Menu {
 		System.out.println("Good bye!");
 	}
 	/**
-	 * This method start the program, and deserialize program data.
+	 * This method start the program.
 	 * <b>pre:</b><br>
 	 * 
 	 * <b>post:</b><br>

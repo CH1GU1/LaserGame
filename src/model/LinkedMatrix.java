@@ -1,15 +1,18 @@
 package model;
 
 public class LinkedMatrix {
-
+	//Class and methods based from Juan Manuel Reyes 
+	//from: https://github.com/seyerman/java-intermediate-course-examples/tree/master/linked-matrix-base
 	//Initialization and constants declaration
-	
+
 	private Node first;
 	private int m;
 	private int n;
-
+	
 	/**
 	 *  This method is the constructor of Player
+	 *  method based from Juan Manuel Reyes 
+	 *  from: https://github.com/seyerman/java-intermediate-course-examples/tree/master/linked-matrix-base
 	 * <b><pre><br><br>
 	 * 
 	 * @param nickName String of player nickname
@@ -22,9 +25,10 @@ public class LinkedMatrix {
 		this.n = n;
 		createMatrix();
 	}
-
 	/**
 	 * This method gets first one node
+	 * method based from Juan Manuel Reyes 
+	 * from: https://github.com/seyerman/java-intermediate-course-examples/tree/master/linked-matrix-base
 	 * <b><pre><br><br>
 	 * 
 	 * @return first
@@ -36,6 +40,8 @@ public class LinkedMatrix {
 	}
 	/**
 	 * This method sets the first one node
+	 * method based from Juan Manuel Reyes 
+	 * from: https://github.com/seyerman/java-intermediate-course-examples/tree/master/linked-matrix-base
 	 * <b><pre><br><br>
 	 * 
 	 * @param first
@@ -47,6 +53,8 @@ public class LinkedMatrix {
 	}
 	/**
 	 * This method creates the matrix by the first one node
+	 * method based from Juan Manuel Reyes 
+	 * from: https://github.com/seyerman/java-intermediate-course-examples/tree/master/linked-matrix-base
 	 * <b><pre><br><br>
 	 * 
 	 * <b>post:</b><br>
@@ -57,6 +65,8 @@ public class LinkedMatrix {
 	}
 	/**
 	 * This method creates the matrix row recursive
+	 * method based from Juan Manuel Reyes 
+	 * from: https://github.com/seyerman/java-intermediate-course-examples/tree/master/linked-matrix-base
 	 * <b><pre><br><br>
 	 * 
 	 * @param i integer of row coordinate
@@ -76,6 +86,8 @@ public class LinkedMatrix {
 	}
 	/**
 	 * This method creates the matrix column recursive
+	 * method based from Juan Manuel Reyes 
+	 * from: https://github.com/seyerman/java-intermediate-course-examples/tree/master/linked-matrix-base
 	 * <b><pre><br><br>
 	 * 
 	 * @param i integer of row coordinate
@@ -102,6 +114,8 @@ public class LinkedMatrix {
 	}
 	/**
 	 * This method overrides the toString class method to display matrix 
+	 * method based from Juan Manuel Reyes 
+	 * from: https://github.com/seyerman/java-intermediate-course-examples/tree/master/linked-matrix-base
 	 * <b><pre><br><br>
 	 * 
 	 * @return msg as String with the matrix information
@@ -115,6 +129,8 @@ public class LinkedMatrix {
 	}
 	/**
 	 * This method is the toString of rows
+	 * method based from Juan Manuel Reyes 
+	 * from: https://github.com/seyerman/java-intermediate-course-examples/tree/master/linked-matrix-base
 	 * <b><pre><br><br>
 	 * 
 	 * @return msg as String with the matrix rows information
@@ -131,6 +147,8 @@ public class LinkedMatrix {
 	}
 	/**
 	 * This method is the toString of columns
+	 * method based from Juan Manuel Reyes 
+	 * from: https://github.com/seyerman/java-intermediate-course-examples/tree/master/linked-matrix-base
 	 * <b><pre><br><br>
 	 * 
 	 * @return msg as String with the matrix columns information
@@ -145,6 +163,4 @@ public class LinkedMatrix {
 		}
 		return msg;
 	}
-
-
 }

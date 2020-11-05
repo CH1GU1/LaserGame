@@ -48,7 +48,6 @@ public class GameManager {
 	public Node getAim() {
 		return aim;
 	}
-
 	public void setAim(Node aim) {
 		this.aim = aim;
 	}
@@ -63,7 +62,6 @@ public class GameManager {
 	public LinkedMatrix getMatrix() {
 		return matrix;
 	}
-
 	/**
 	 * This is the public method to add a player to the binary tree
 	 * <b><pre><br>Players must be have different scores cause is saved to a binary tree<br>
@@ -387,12 +385,11 @@ public class GameManager {
 					rand.setMirror("\\");
 				}
 				randomMirrors(m, n, k-1);
-			}else {
+			} else {
 				randomMirrors(m, n, k);
 			}
 		}
 	}
-
 	/**
 	 * This method define the first direction to make the laser fire, this method is not for the special case (corner fire)
 	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
