@@ -254,6 +254,10 @@ public class Menu {
 	/**
 	 *This method open the menu and keeps recursive until 3 is pressed
 	 *<b>pre:</b> <br>
+	 *
+	 *@param option integer as option chosen by user
+	 *@param menu String as menu information
+	 *
 	 *<b>post:</b>d<br>
 	 */
 	public void recursiveMenu(int option, String menu) {
