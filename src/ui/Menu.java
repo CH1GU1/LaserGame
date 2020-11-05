@@ -35,23 +35,23 @@ public class Menu {
 	}
 	public final static void clearConsole()
 	{
-	    try
-	    {
-	        final String os = System.getProperty("os.name");
+		try
+		{
+			final String os = System.getProperty("os.name");
 
-	        if (os.contains("Windows"))
-	        {
-	            Runtime.getRuntime().exec("cls");
-	        }
-	        else
-	        {
-	            Runtime.getRuntime().exec("clear");
-	        }
-	    }
-	    catch (final Exception e)
-	    {
-	        //  Handle any exceptions.
-	    }
+			if (os.contains("Windows"))
+			{
+				Runtime.getRuntime().exec("cls");
+			}
+			else
+			{
+				Runtime.getRuntime().exec("clear");
+			}
+		}
+		catch (final Exception e)
+		{
+			//  Handle any exceptions.
+		}
 	}
 	/**
 	 * This method receives the menu option .
@@ -185,8 +185,8 @@ public class Menu {
 			}
 			System.out.println(gm.getMatrix());
 			fireLocCheatCoordinates(stop, m, n, false, nickName, k-kRest, score+scoreMult);
-
-		} else {
+		}
+		else {
 			fire(fire, size, m, n, nickName, k, stop, score);
 		}
 	}

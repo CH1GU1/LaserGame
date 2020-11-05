@@ -3,7 +3,6 @@ public class GameManager {
 
 	//Initialization and constants declaration
 
-	public final static String SAVE_PATH_FILE_SCORES = "data/scores.ap2";
 	private LinkedMatrix matrix;
 	private String infoScores;
 	private Node exit;
@@ -136,11 +135,9 @@ public class GameManager {
 		if (ply == null) {
 			//nothing
 		} else {
-			/* first recursion on left child */
 			printInOrder(ply.getLeft(), num+1);
 
-			/* then print the data of node */
-			infoScores += ""+num+ ". Nickname: "+ply.getNickName()+"\nScore: "+ply.getScore()+"\n"; 
+			infoScores += ". Nickname: "+ply.getNickName()+"\nScore: "+ply.getScore()+"\n"; 
 
 			printInOrder(ply.getRight(), num+1); 
 		}
@@ -239,6 +236,7 @@ public class GameManager {
 	 * This method makes the fire that the user type in the coordinates
 	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
 	 * <b><pre><br>Node to fire must be on the matrix size<br>
+	 * <b><pre><br>Node must be on a lateral node of the matrix<br>
 	 * 
 	 * @param rowFire as integer of the row node to fire
 	 * @param colFire as integer of the column node to fire
@@ -444,6 +442,7 @@ public class GameManager {
 	/**
 	 * This method define the first direction to make the laser fire when player wants to make it in a corner 
 	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * <b><pre><br>Node must be on a lateral node of the matrix<br>
 	 * 
 	 * @param nodeToGo as node of player want to make the fire
 	 * 
@@ -518,6 +517,7 @@ public class GameManager {
 	/**
 	 * This method makes the shot and go by the matrix depending of the course that the laser takes in a recursive way
 	 * <b><pre><br>Matrix must be created, thats mean, playing<br>
+	 * <b><pre><br>Node must be on a lateral node of the matrix<br>
 	 * 
 	 * @param current as node of laser is passes
 	 * @param course as Sting of course that laser goes
