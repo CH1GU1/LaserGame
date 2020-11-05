@@ -1,7 +1,6 @@
 package ui;
 
 
-import java.io.IOException;
 import java.util.Scanner;
 import model.GameManager;
 
@@ -33,26 +32,6 @@ public class Menu {
 		menu += "Please enter an option\n";
 		return menu;
 	}
-	public final static void clearConsole()
-	{
-		try
-		{
-			final String os = System.getProperty("os.name");
-
-			if (os.contains("Windows"))
-			{
-				Runtime.getRuntime().exec("cls");
-			}
-			else
-			{
-				Runtime.getRuntime().exec("clear");
-			}
-		}
-		catch (final Exception e)
-		{
-			//  Handle any exceptions.
-		}
-	}
 	/**
 	 * This method receives the menu option .
 	 * <b>pre:</b>Select a valid option.<br>
@@ -63,13 +42,7 @@ public class Menu {
 		switch (option) {
 		case 1:
 			System.out.println("~~~~~~~~~~ PLAYING ~~~~~~~~~~");
-			try {
 				play();
-				System.out.println("Data saved!");
-			} catch (IOException e) {
-				System.out.println("Data can not be saved!!");
-			}
-			clearConsole();
 			break;
 		case 2:
 			System.out.println("~~~~~~~~~~ SCORES ~~~~~~~~~~");
@@ -91,7 +64,7 @@ public class Menu {
 	 * <b>post:</b><br>
 	 * 
 	 */
-	private void play() throws IOException {
+	private void play() {
 		System.out.println("Please enter the Nickname, Number of columns, cumber of rows and number of mirrors in a line");
 		String line = sc.nextLine();
 		String [] parts = line.split(" ");
@@ -246,7 +219,6 @@ public class Menu {
 	 * 
 	 */
 	private void showScoresInOrder() {
-
 		if(gm.printInOrder().isEmpty()) {
 			System.out.println("***** There no scores yet ******");
 		} else {
@@ -263,7 +235,9 @@ public class Menu {
 	 */
 	private void exitProgram() {
 		sc.close();
-		System.out.println("Good bye!");
+		System.out.println("«•«•«•«• GOOD BYE PLAYER! •»•»•»\n");
+		System.out.println("«•«•«•«•«•«• THE •»•»•»•»•»•»");
+		System.out.println("«•«•«•«• LASER GAME •»•»•»•»•»");
 	}
 	/**
 	 * This method start the program.

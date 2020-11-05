@@ -47,6 +47,14 @@ public class GameManager {
 	public Node getAim() {
 		return aim;
 	}
+	/**
+	 * This method sets the node that user want to fire
+	 * <b><pre><br><br>
+	 * 
+	 * @param aim as Node
+	 * 
+	 * <b>post:</b><br>
+	 */
 	public void setAim(Node aim) {
 		this.aim = aim;
 	}
@@ -137,7 +145,7 @@ public class GameManager {
 		} else {
 			printInOrder(ply.getLeft(), num+1);
 
-			infoScores += ". Nickname: "+ply.getNickName()+"\nScore: "+ply.getScore()+"\n"; 
+			infoScores += "-> Nickname: "+ply.getNickName()+"\nScore: "+ply.getScore()+"\n"; 
 
 			printInOrder(ply.getRight(), num+1); 
 		}
