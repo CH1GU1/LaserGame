@@ -42,7 +42,7 @@ public class Menu {
 		switch (option) {
 		case 1:
 			System.out.println("~~~~~~~~~~ PLAYING ~~~~~~~~~~");
-				play();
+			play();
 			break;
 		case 2:
 			System.out.println("~~~~~~~~~~ SCORES ~~~~~~~~~~");
@@ -73,12 +73,17 @@ public class Menu {
 		int n = Integer.parseInt(parts[1]);
 		int m = Integer.parseInt(parts[2]);
 		int k = Integer.parseInt(parts[3]);
-		gm.addMatrix(m, n);
-		if(k <= m*n) {
-			gm.randomMirrors(m, n, k);
-			fireLocCheatCoordinates(false, m, n, true, nickName, k, initialScore);
-		} else {
-			System.out.println("Mirrors must be minors than the matrix size");
+		if(n <= 26 && m*n>0) {
+			gm.addMatrix(m, n);
+			if(k <= m*n) {
+				gm.randomMirrors(m, n, k);
+				fireLocCheatCoordinates(false, m, n, true, nickName, k, initialScore);
+			} else {
+				System.out.println("Mirrors must be minors than the matrix size");
+			}
+		}
+		else {
+			System.out.println("Columns can not be more than 26");
 		}
 	}
 	/**
