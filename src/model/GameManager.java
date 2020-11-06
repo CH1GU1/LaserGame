@@ -1,8 +1,15 @@
 package model;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 public class GameManager {
 
 	//Initialization and constants declaration
-
+	public final static String PLAYERS_FILE = "data/players.ap2";
 	private LinkedMatrix matrix;
 	private String infoScores;
 	private Node exit;
@@ -612,5 +619,32 @@ public class GameManager {
 	 */
 	public void addMatrix(int m, int n) {
 		matrix = new LinkedMatrix(m, n);
+	}
+	/**
+	 * This method serialize the players information
+	 * <b><pre>:<br><br>
+	 * 
+	 * @throws IOException
+	 * 
+	 * <b>post:</b>Serialize the players<br>
+	 */
+	public void savePlayers() throws IOException {
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(PLAYERS_FILE));
+		oos.writeObject(root);
+		oos.close();
+	}
+	/**
+	 * This method deserialize the players information
+	 * <b><pre>:<br>Serialized files must be created to be deserialize<br>
+	 * 
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * 
+	 * <b>post:</b>Deserialize the players information<br>
+	 */
+	public void loadPlayers() throws IOException, ClassNotFoundException{	
+		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(PLAYERS_FILE));
+		root = (Player)ois.readObject();
+		ois.close();
 	}
 }

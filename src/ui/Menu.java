@@ -1,6 +1,7 @@
 package ui;
 
 
+import java.io.IOException;
 import java.util.Scanner;
 import model.GameManager;
 
@@ -42,7 +43,11 @@ public class Menu {
 		switch (option) {
 		case 1:
 			System.out.println("~~~~~~~~~~ PLAYING ~~~~~~~~~~");
-			play();
+			try {
+				play();
+			} catch (IOException e) {
+				System.out.println("Players can not be saved!");
+			}
 			break;
 		case 2:
 			System.out.println("~~~~~~~~~~ SCORES ~~~~~~~~~~");
@@ -64,7 +69,7 @@ public class Menu {
 	 * <b>post:</b><br>
 	 * 
 	 */
-	private void play() {
+	private void play() throws IOException {
 		System.out.println("Please enter the Nickname, Number of columns, cumber of rows and number of mirrors in a line");
 		String line = sc.nextLine();
 		String [] parts = line.split(" ");
@@ -78,6 +83,7 @@ public class Menu {
 			if(k <= m*n) {
 				gm.randomMirrors(m, n, k);
 				fireLocCheatCoordinates(false, m, n, true, nickName, k, initialScore);
+				gm.savePlayers();
 			} else {
 				System.out.println("Mirrors must be minors than the matrix size");
 			}
@@ -245,13 +251,21 @@ public class Menu {
 		System.out.println("«•«•«•«• LASER GAME •»•»•»•»•»");
 	}
 	/**
-	 * This method start the program.
+	 * This method start the program and deserialize the players data.
 	 * <b>pre:</b><br>
 	 * 
 	 * <b>post:</b><br>
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
 	 */
 	public void startMenu() {
-		//		loadProgram();
+		try {
+			gm.loadPlayers();
+		} catch (ClassNotFoundException e) {
+			System.out.println("Players file does not exist!");
+		} catch (IOException e) {
+			System.out.println("Players file does not exist!");
+		}
 		String menu = getMenu();
 		int option = 0;
 		recursiveMenu(option, menu);
@@ -290,7 +304,7 @@ public class Menu {
 	 *<b>pre:</b> <br>
 	 *<b>post:</b>The Menu is ready<br>
 	 */
-	public Menu () {
+	public Menu ()  {
 		this.gm = startGame();
 	}
 	/**
